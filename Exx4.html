@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&family=Shantell+Sans:ital,wght@1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 45vw;
+            height: 700px;
+            border: 5px solid black;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-y: scroll;
+            gap: 20px;
+        }
+
+        .topic-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .topic-container img {
+            width: 150px;
+            height: 150px;
+        }
+
+        .topic-container h2 {
+            font-family: 'Shantell Sans', cursive;
+            font-size: 40px;
+        }
+
+        .option-container {
+            position: relative;
+            margin-bottom: 20px;
+            width: 500px;
+        }
+
+        .option-container .data-child {
+            position: absolute;
+            background: #e5eef3;
+            width: 100%;
+            padding: 20px;
+            padding-left: 20px;
+            padding-right: 20px;
+            margin-top: 10px;
+            border-radius: 10px;
+            padding-bottom: 0;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .option-container .data-child .child {
+            margin-bottom: 5px;
+        }
+
+        .option-container .data-child .child p {
+            cursor: pointer;
+            padding: 5px 0;
+        }
+
+        .option-container .data-child .child p:hover {
+            color: #4278da;
+        }
+
+        .option-c.option-container {
+            content: '';
+            position: absolute;
+            height: 7px;
+            width: 7px;
+            z-index: 999;
+            border-top: 1px solid black;
+            border-right: 1px solid black;
+            transform: rotate(var(--rotate-angle));
+            display: block;
+            bottom: 17px;
+            right: 20px;
+        }
+
+        .option-container input {
+            padding: 0 20px;
+            width: 100%;
+            height: 40px;
+            border-radius: 10px;
+            background: #dbe2e7;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .output-container {
+            min-height: 300px;
+            width: 900px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            
+        }
+
+        .output-container .child {
+            height: 100px;
+            /* width: 300px; */
+            border-radius: 20px;
+            border: 1px solid silver;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+
+        }
+
+        .output-container .child h4 {
+            font-size: 13px;
+        }
+        .output-container .child p {
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .output-container .child .span-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 10px;
+        }
+
+        .output-container .child .span-container a {
+            color: #3682f4;
+            cursor: pointer;
+        }
+
+        .output-container .child .span-container i {
+            color: #3682f4;
+            width: 10px;
+            height: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="topic-container">
+            <img src="uni.png">
+            <h2>Which university do you want to study?</h2>
+        </div>
+        <div class="option-container" id="option_container">
+            <input type="text" id="choose" placeholder="Country">
+            <div class="data-child" id="option">
+                <div class="child" id="child_chosen">
+                    <p>Cambodia</p>
+                </div>
+                <div class="child" id="child_chosen">
+                    <p>Thailand</p>
+                </div>
+                <div class="child" id="child_chosen">
+                    <p>Vietnam</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="output-container" id="result">
+        </div>
+
+    </div>
+</body>
+<script>
+
+    let option_input = document.getElementById('choose')
+    let option = document.getElementById('option')
+    let data_child = document.querySelectorAll('#child_chosen')
+    let option_container = document.getElementById('option_container')
+    let result = document.getElementById('result')
+    let input_count = 0
+    let uurl = "http://universities.hipolabs.com/search?country="
+    let button = document.getElementById('mybutton')
+
+    option_input.readOnly = true
+    // option_field.style.setProperty('--rotate-angle', '135deg')
+
+    option_input.onclick = () => {
+        if (input_count % 2 == 0) {
+            option.style.display = "block"
+            // option_field.style.setProperty('--rotate-angle', '45deg')
+        }
+        else {
+            option.style.display = "none"
+            // option_field.style.setProperty('--rotate-angle', '135deg')
+        }
+        input_count = input_count + 1
+    }
+
+    data_child.forEach((child) => {
+        child.onclick = () => {
+            option_input.setAttribute("placeholder", child.childNodes[1].innerHTML)
+            dosomething(child.childNodes[1].innerHTML)
+            // option_field.style.setProperty('--rotate-angle', '135deg')
+            option.style.display = "none"
+            input_count = input_count + 1
+        }
+    })
+
+    function dosomething(value) {
+        let url = uurl + value
+        fectdata(url)
+    }
+
+    function fectdata(url) {
+        result.innerHTML = '<div style="width: 100%; display:flex; justify-content:center; align-items:center; height: 100%; grid-column: 1/4"></div>'
+        fetch(url).then(async (res) => {
+            let data = await res.json()
+            show_data(data)
+        })
+    }
+
+    function show_data(data) {
+        let count_uni = 0
+        let result_string = ""
+
+        data.forEach((arr) => {
+            let web_page = arr['web_pages'][0]
+            let country = arr['country']
+            let alpha = arr['alpha_two_code']
+            let name = arr['name']
+
+            if (count_uni < 15)
+                result_string +=
+                    `
+
+            <div class="child">
+                <h4>${name}</h4>
+                <p>(${country} - ${alpha})</p>
+                <div class="span-container">
+                    <i>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12.75 3.03v.568c0 .334.148.65.405.864l1.068.89c.442.369.535 1.01.216 1.49l-.51.766a2.25 2.25 0 01-1.161.886l-.143.048a1.107 1.107 0 00-.57 1.664c.369.555.169 1.307-.427 1.605L9 13.125l.423 1.059a.956.956 0 01-1.652.928l-.679-.906a1.125 1.125 0 00-1.906.172L4.5 15.75l-.612.153M12.75 3.031a9 9 0 00-8.862 12.872M12.75 3.031a9 9 0 016.69 14.036m0 0l-.177-.529A2.25 2.25 0 0017.128 15H16.5l-.324-.324a1.453 1.453 0 00-2.328.377l-.036.073a1.586 1.586 0 01-.982.816l-.99.282c-.55.157-.894.702-.8 1.267l.073.438c.08.474.49.821.97.821.846 0 1.598.542 1.865 1.345l.215.643m5.276-3.67a9.012 9.012 0 01-5.276 3.67m0 0a9 9 0 01-10.275-4.835M15.75 9c0 .896-.393 1.7-1.016 2.25" />
+                          </svg>                          
+                    </i>
+                    <a href="${web_page}">"${web_page}"</a>
+                </div>
+            </div>
+
+            `
+            result.innerHTML = result_string
+            count_uni = count_uni + 1
+        })
+
+    }
+</script>
+
+</html>

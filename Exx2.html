@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gender guessing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mynerve&family=Zen+Dots&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 900px;
+            height: auto;
+            border: 5px solid black;
+            padding: 130px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .box h4 {
+            text-align: center;
+        }
+
+        p {
+            font-size: 100px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 50px;
+            margin-bottom: 10px;
+            font-family: 'Mynerve', cursive;
+        }
+        h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-family: 'Shantell Sans', cursive;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .input-container input {
+            padding: 10px;
+            width: 250px;
+            background: #fff;
+            border: 1px solid silve;
+            border-radius: 10px;
+        }
+        .input-container button {
+            padding: 10px;
+            width: 100px;
+            border: 0;
+            background: rgb(50, 172, 233);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+        .box {
+            width: 270px;
+            height: 120px;
+            border: 1px solid silver;
+            border-radius: 10px;
+            background: rgb(232, 231, 231);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .box h4:nth-child(1) {
+            font-size: 20px;
+        }
+        .box h4:nth-child(2) {
+            font-size: 32px;
+            color: rgb(249, 100, 7);
+        }
+        .box h4:nth-child(3) {
+            font-size: 26px;
+            color: rgb(43, 70, 244);
+           
+        }
+
+        img {
+            width: 120px;
+            height: 120px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="emoji.png" alt="">
+        <h1><span>I may know your </span><span style="color:rgba(70, 70, 239, 0.954)">gender</span></h1>
+        <!-- <button id="button">Tell me your name</button> -->
+        <div class="input-container">
+            <input type="text" id="getname" placeholder="Tell me your name">
+            <button id="getguess">Guess</button>
+        </div>
+        <div class="box" id="box">
+            <h4>Ur name</h4>
+            <h4>Gender</h4>
+            <h4>Probability</h4>
+        </div>
+    </div>
+    <script>
+        let name = document.getElementById('getname');
+        let button = document.getElementById('getguess');
+        let box = document.getElementById('box');
+        let url = "https://api.genderize.io/?name="
+
+        button.onclick = () => {
+            let input_value = name.value
+            if (input_value === '') {
+                alert("Please input name")
+            } else {
+                url += input_value
+                fetchNewGuessing(url)
+            }
+        }
+        function fetchNewGuessing(api_url) {
+            // box.innerHTML = ''
+            fetch(api_url).then(async (res) => {
+                let data = await res.json();
+
+                window.setTimeout(() => {
+                    show_data(data)
+                }, 2000)
+            });
+        }
+        function show_data(output) {
+            console.log(output)
+            box.innerHTML =
+                `
+                <h4>${output['name']}</h4>
+                <h4>${output['gender']}</h4>
+                <h4>${parseInt(parseFloat(output['probability']) * 100)}%</h4>
+                `
+        }
+    </script>
+</body>
+</html>

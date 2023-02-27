@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nationality</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Shadows+Into+Light&family=Shantell+Sans:ital,wght@1,300&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 700px;
+            height: 600px;
+            border: 5px solid black;
+            padding: 130px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .second-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 10px;
+
+        }
+        .second-container img {
+            width: 120px;
+            height: 120px;
+        }
+
+        .second-container h2 {
+            font-family: 'Shadows Into Light', cursive;
+            font-family: 'Shantell Sans', cursive;
+            font-size: 40px;
+        }
+
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .input-container input {
+            padding: 10px;
+            width: 250px;
+            background: #fff;
+            border: 1px solid silve;
+            border-radius: 10px;
+        }
+
+        .input-container button {
+            padding: 10px;
+            width: 100px;
+            border: 0;
+            background: rgb(45, 130, 241);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .box {
+            height: 200px;
+            width: 355px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        .box .child {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 10px;
+            align-items: center;
+            height: 40px;
+            width: 100%;
+            margin-bottom: 10px;
+            gap: 10px;
+            border: 1px solid silver;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="second-container">
+            <img src="earth.png" alt="">
+            <h2><span>I know your </span><span style="color:rgba(70, 70, 239, 0.954)">Home</span></h2>
+        </div>
+        <div class="input-container">
+            <input type="text" id="getname" placeholder="Tell me your first name">
+            <button id="getguess">Guess</button>
+        </div>
+        <div class="box" id="boxes">
+            <!-- <div class="child">
+                <h3>Country</h3>
+                <h3 style="color:rgb(249, 100, 7)">Probability</h3>
+            </div> -->
+        </div>
+
+    </div>
+
+</body>
+<script>
+    let url = "https://api.nationalize.io/?name="
+    let name = document.getElementById('getname');
+    let button = document.getElementById('getguess');
+    let box = document.getElementById('box');
+
+
+    button.onclick = () => {
+        if (name.value !== '') {
+            let value = url + name.value
+            fetchCountryGuessing(value)
+            name.value = ''
+        }
+
+    }
+    function fetchCountryGuessing(api_url) {
+        // box.innerHTML = ''
+        fetch(api_url).then(async (res) => {
+            let data = await res.json()
+            show_data(data['country'])
+
+        })
+    }
+    function show_data(output) {
+        let boxes_string = ""
+        output.forEach((arr) => {
+            boxes_string +=
+                `
+                <div class="child">
+                    <h3>${arr['country_id']}</h3 >
+                    <h3 style="color:rgb(249, 100, 7)">${parseInt(parseFloat(arr['probability']) * 100)}%</h3>
+                </div >
+                `
+        })
+        boxes.innerHTML = boxes_string
+
+    }
+</script>
+
+</html>
